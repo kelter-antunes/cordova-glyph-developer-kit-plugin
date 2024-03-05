@@ -1,0 +1,43 @@
+{
+    "name": "cordova-glyph-developer-kit-plugin",
+    "version": "0.0.1",
+    "description": "A Cordova plugin to integrate Glyph Developer Kit",
+    "cordova": {
+      "id": "cordova-glyph-developer-kit-plugin",
+      "platforms": [
+        "android"
+      ]
+    },
+    "repository": "github:kelter-antunes/cordova-glyph-developer-kit-plugin",
+    "bugs": "https://github.com/kelter-antunes/cordova-glyph-developer-kit-plugin/issues",
+    "keywords": [
+      "cordova",
+      "glyph",
+      "nothing",
+      "ecosystem:cordova",
+      "cordova-android"
+    ],
+    "scripts": {
+      "test": "npm run lint",
+      "lint": "eslint ."
+    },
+    "author": "Miguel 'aka' Kelter",
+    "license": "",
+    "engines": {
+      "cordovaDependencies": {
+        "3.0.0": {
+          "cordova-android": ">=6.3.0"
+        },
+        "5.0.0": {
+          "cordova-android": ">=10.0.0",
+          "cordova-ios": ">=6.0.0"
+        },
+        "6.0.0": {
+          "cordova": ">100"
+        }
+      }
+    },
+    "devDependencies": {
+      "@cordova/eslint-config": "^5.0.0"
+    }
+  }
