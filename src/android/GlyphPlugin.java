@@ -4,6 +4,7 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
+import android.content.Context;
 
 import com.nothing.ketchum.Common;
 import com.nothing.ketchum.GlyphException;
@@ -15,6 +16,15 @@ import org.json.JSONException;
 
 public class GlyphPlugin extends CordovaPlugin {
 
+    private Context context; // Declare a Context variable
+
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        // Save the context for later use
+        this.context = cordova.getActivity().getApplicationContext();
+    }
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("init")) {
@@ -23,7 +33,7 @@ public class GlyphPlugin extends CordovaPlugin {
                 // You can use the args parameter to pass any additional data from JavaScript
                 
                 // Example:
-                boolean success = GlyphManager.getInstance().init();
+                boolean success = GlyphManager.getInstance(context).init(); // Pass the context
                 
                 // Handle the result and callback to JavaScript
                 // Example:
