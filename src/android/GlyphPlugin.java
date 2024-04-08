@@ -12,7 +12,6 @@ import android.util.Log;
 
 import com.nothing.ketchum.Common;
 import com.nothing.ketchum.GlyphException;
-import com.nothing.ketchum.GlyphFrame;
 import com.nothing.ketchum.GlyphManager;
 
 import org.json.JSONArray;
@@ -53,7 +52,11 @@ public class GlyphPlugin extends CordovaPlugin {
 
                     @Override
                     public void onServiceDisconnected(ComponentName componentName) {
-                        mGM.closeSession();
+                        try {
+                            mGM.closeSession();
+                        } catch (GlyphException e) {
+                            Log.e("GlyphPlugin", e.getMessage());
+                        }
                     }
                 };
 
