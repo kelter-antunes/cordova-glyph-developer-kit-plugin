@@ -75,9 +75,30 @@ public class GlyphPlugin extends CordovaPlugin {
         } else if (action.equals("createFrame")) {
             try {
 
+                /*
                 GlyphFrame.Builder builder = mGM.getGlyphFrameBuilder();
                 GlyphFrame frame = builder.buildChannelA().build();
                 mGM.toggle(frame);
+    
+                */
+                JSONArray channelsArray = args.getJSONArray(0);
+                int period = args.getInt(1);
+                int cycles = args.getInt(2);
+                int interval = args.getInt(3);
+    
+                GlyphFrame.Builder builder = mGM.getGlyphFrameBuilder();
+                GlyphFrame.Builder frameBuilder = builder;
+                for (int i = 0; i < channelsArray.length(); i++) {
+                    int channel = channelsArray.getInt(i);
+                    frameBuilder = frameBuilder.buildChannel(channel);
+                }
+                GlyphFrame frame = frameBuilder.buildPeriod(period)
+                                                .buildCycles(cycles)
+                                                .buildInterval(interval)
+                                                .build();
+
+
+
 
                 // Return the frame JSON representation to JavaScript
                 callbackContext.success();
