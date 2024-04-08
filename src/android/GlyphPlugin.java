@@ -3,25 +3,30 @@ package com.kelter.glyphplugin;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaWebView;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.nothing.ketchum.Common;
 import com.nothing.ketchum.GlyphException;
+import com.nothing.ketchum.GlyphFrame;
 import com.nothing.ketchum.GlyphManager;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 public class GlyphPlugin extends CordovaPlugin {
 
-    private Context context; // Declare a Context variable
+    private GlyphManager mGM = null;
+    private GlyphManager.Callback mCallback = null;
+    private Context context;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        // Save the context for later use
         this.context = cordova.getActivity().getApplicationContext();
     }
 
@@ -29,29 +34,42 @@ public class GlyphPlugin extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("init")) {
             try {
-                // Call the necessary Glyph SDK methods here
-                // You can use the args parameter to pass any additional data from JavaScript
-                
-                // Example:
-                boolean success = GlyphManager.getInstance(context).init(); // Pass the context
-                
-                // Handle the result and callback to JavaScript
-                // Example:
-                if (success) {
-                    callbackContext.success();
-                } else {
-                    callbackContext.error("Initialization failed");
-                }
+                // Initialize GlyphManager
+                mGM = GlyphManager.getInstance(context);
+
+                // Initialize Callback
+                mCallback = new GlyphManager.Callback() {
+                    @Override
+                    public void onServiceConnected(ComponentName componentName) {
+                        if (Common.is20111()) mGM.register(Common.DEVICE_20111);
+                        if (Common.is22111()) mGM.register(Common.DEVICE_22111);
+                        if (Common.is23111()) mGM.register(Common.DEVICE_23111);
+                        try {
+                            mGM.openSession();
+                        } catch(GlyphException e) {
+                            Log.e("GlyphPlugin", e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName componentName) {
+                        mGM.closeSession();
+                    }
+                };
+
+                // Initialize GlyphManager with the Callback
+                mGM.init(mCallback);
+
+                // Indicate success to JavaScript
+                callbackContext.success();
+                return true;
             } catch (Exception e) {
                 // Catch any exceptions and pass them back to JavaScript
                 callbackContext.error("Exception: " + e.getMessage());
+                return false;
             }
-
-            return true;
         }
-        
-        // Add more actions and corresponding implementations as needed
-        
+
         return false;
     }
 }
