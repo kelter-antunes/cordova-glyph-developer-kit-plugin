@@ -97,6 +97,8 @@ public class GlyphPlugin extends CordovaPlugin {
                                                 .buildInterval(interval)
                                                 .build();
 
+                mGM.toggle(frame);
+
 
 
 
