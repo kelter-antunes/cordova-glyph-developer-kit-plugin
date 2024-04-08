@@ -31,4 +31,22 @@ GlyphInterface.requestPermission = function(success, failure) {
     );
 };
 
+GlyphInterface.createFrame = function(channels, period, cycles, interval, success, failure) {
+    exec(
+        success,
+        failure,
+        'GlyphPlugin',
+        'createFrame', [channels, period, cycles, interval]
+    );
+};
+
+GlyphInterface.toggleFrame = function(frameJSON, success, failure) {
+    exec(
+        success,
+        failure,
+        'GlyphPlugin',
+        'toggleFrame', [frameJSON]
+    );
+};
+
 module.exports = GlyphInterface;

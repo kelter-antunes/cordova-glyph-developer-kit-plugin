@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.nothing.ketchum.Common;
 import com.nothing.ketchum.GlyphException;
+import com.nothing.ketchum.GlyphFrame;
 import com.nothing.ketchum.GlyphManager;
 
 import org.json.JSONArray;
@@ -62,6 +63,55 @@ public class GlyphPlugin extends CordovaPlugin {
 
                 // Initialize GlyphManager with the Callback
                 mGM.init(mCallback);
+
+                // Indicate success to JavaScript
+                callbackContext.success();
+                return true;
+            } catch (Exception e) {
+                // Catch any exceptions and pass them back to JavaScript
+                callbackContext.error("Exception: " + e.getMessage());
+                return false;
+            }
+        } else if (action.equals("createFrame")) {
+            try {
+                // Parse input parameters
+                JSONArray channelsArray = args.getJSONArray(0);
+                int period = args.getInt(1);
+                int cycles = args.getInt(2);
+                int interval = args.getInt(3);
+
+                // Create GlyphFrame.Builder
+                GlyphFrame.Builder builder = mGM.getGlyphFrameBuilder();
+
+                // Build the GlyphFrame
+                GlyphFrame.Builder frameBuilder = builder;
+                for (int i = 0; i < channelsArray.length(); i++) {
+                    String channel = channelsArray.getString(i);
+                    frameBuilder = frameBuilder.buildChannel(channel);
+                }
+                GlyphFrame frame = frameBuilder.buildPeriod(period)
+                                                .buildCycles(cycles)
+                                                .buildInterval(interval)
+                                                .build();
+
+                // Return the frame JSON representation to JavaScript
+                callbackContext.success(frame.toJSON());
+                return true;
+            } catch (Exception e) {
+                // Catch any exceptions and pass them back to JavaScript
+                callbackContext.error("Exception: " + e.getMessage());
+                return false;
+            }
+        } else if (action.equals("toggleFrame")) {
+            try {
+                // Parse input parameters
+                String frameJSON = args.getString(0);
+
+                // Create GlyphFrame from JSON
+                GlyphFrame frame = GlyphFrame.fromJSON(frameJSON);
+
+                // Toggle the GlyphFrame
+                mGM.toggle(frame);
 
                 // Indicate success to JavaScript
                 callbackContext.success();
