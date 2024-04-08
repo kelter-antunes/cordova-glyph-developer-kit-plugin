@@ -40,7 +40,7 @@
         </config-file>
 
         <!-- Specify the source file for the plugin -->
-        <source-file src="src/android/GlyphPlugin.java" target-dir="src/com/kelter/glyphplugin" />
+        <source-file src="src/android/GlyphInterface.java" target-dir="src/com/kelter/glyphplugin" />
 
 
         <!-- Add dependency on Glyph SDK -->
