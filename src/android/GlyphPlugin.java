@@ -80,7 +80,7 @@ public class GlyphPlugin extends CordovaPlugin {
                 mGM.toggle(frame);
 
                 // Return the frame JSON representation to JavaScript
-                callbackContext.success(frame.toJSON());
+                callbackContext.success();
                 return true;
             } catch (Exception e) {
                 // Catch any exceptions and pass them back to JavaScript
