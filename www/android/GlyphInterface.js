@@ -49,4 +49,13 @@ GlyphInterface.toggleFrame = function(frameJSON, success, failure) {
     );
 };
 
+GlyphInterface.turnOff = function(success, failure) {
+    exec(
+        success,
+        failure,
+        'GlyphPlugin',
+        'turnOff'
+    );
+};
+
 module.exports = GlyphInterface;
